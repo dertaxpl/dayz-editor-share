@@ -21,7 +21,15 @@
         .logo span { color: #ffffff; font-weight: 300; font-size: 18px; letter-spacing: 0; }
         .nav-buttons { display: flex; gap: 15px; align-items: center; }
         
-        .lang-select { background: #151a22; color: #a0aec0; border: 1px solid #4a5568; padding: 6px 10px; border-radius: 6px; font-size: 12px; cursor: pointer; outline: none; }
+        .lang-dropdown { position: relative; display: inline-block; }
+        .lang-btn { background: #151a22; color: #a0aec0; border: 1px solid #4a5568; padding: 8px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-weight: 600; }
+        .lang-btn:hover { border-color: #cbd5e1; color: white; }
+        .lang-options { display: none; position: absolute; right: 0; top: 100%; margin-top: 5px; background: #151a22; border: 1px solid #4a5568; border-radius: 8px; overflow: hidden; z-index: 200; box-shadow: 0 4px 15px rgba(0,0,0,0.5); min-width: 100px; }
+        .lang-option { padding: 10px 15px; color: #a0aec0; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; width: 100%; text-align: left; background: none; border: none; }
+        .lang-option:hover { background: #1f2833; color: white; }
+        .show-lang { display: block; }
+        .flag { width: 16px; height: 11px; object-fit: cover; border-radius: 2px; }
+
         .btn-add { background-color: #dc2626; color: white; border: none; padding: 10px 22px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2); }
         .btn-add:hover { background-color: #b91c1c; transform: translateY(-1px); }
         .btn-login { background: transparent; color: white; border: 1px solid #4a5568; padding: 10px 20px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
@@ -80,90 +88,78 @@
     </style>
 </head>
 <body>
-
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
             <div class="logo">🎯 DAYZ <span>EDITOR SHARE</span></div>
             <div class="nav-buttons">
-                <select class="lang-select">
-                    <option value="en">🇺🇸 EN</option>
-                    <option value="pl">🇵🇱 PL</option>
-                </select>
-                <button class="btn-add">Add Project</button>
-                <button class="btn-login">Login</button>
+                <div class="lang-dropdown">
+                    <button class="lang-btn" onclick="toggleLangMenu()" id="current-lang">
+                        <img src="https://flagcdn.com" class="flag" alt="EN"> EN
+                    </button>
+                    <div class="lang-options" id="lang-options-menu">
+                        <button class="lang-option" onclick="changeLanguage('en')">
+                            <img src="https://flagcdn.com" class="flag" alt="EN"> EN
+                        </button>
+                        <button class="lang-option" onclick="changeLanguage('pl')">
+                            <img src="https://flagcdn.com" class="flag" alt="PL"> PL
+                        </button>
+                    </div>
+                </div>
+                <button class="btn-add" id="nav-btn-add">Add Project</button>
+                <button class="btn-login" id="nav-btn-login">Login</button>
             </div>
         </div>
     </nav>
 
     <!-- Header Section -->
     <header>
-        <div class="badge">DayZ Server Creators Zone</div>
-        <h2>Modify Your Server's Map</h2>
-        <p>Browse and download free, ready-to-use <span class="highlight">.dze</span> and <span class="highlight">.json</span> custom files made by the community for PC, PS4, and XBOX players.</p>
+        <div class="badge" id="hdr-badge">DayZ Server Creators Zone</div>
+        <h2 id="hdr-title">Modify Your Server's Map</h2>
+        <p id="hdr-desc">Browse and download free, ready-to-use <span class="highlight">.dze</span> and <span class="highlight">.json</span> custom files made by the community for PC, PS4, and XBOX players.</p>
         
         <!-- Search Panel -->
         <div class="search-panel">
             <div class="search-input-wrapper">
-                <input type="text" placeholder="Search custom locations (e.g. Zelengorsk Camp, NWAF Base)...">
+                <input type="text" id="search-input" placeholder="Search custom locations (e.g. Zelengorsk Camp, NWAF Base)...">
             </div>
-            <select>
-                <option value="">All Maps (Select)</option>
-                <optgroup label="Official Maps (BI)">
+            <select id="map-select">
+                <option value="" id="opt-all-maps">All Maps (Select)</option>
+                <optgroup label="Official Maps (BI)" id="group-official">
                     <option value="chernarus">Chernarus (Plus)</option>
                     <option value="livonia">Livonia</option>
                     <option value="sakhal">Sakhal (Frostline)</option>
                 </optgroup>
-                <optgroup label="Community Maps">
+                <optgroup label="Community Maps" id="group-community">
                     <option value="alteria">Alteria</option>
-                    <option value="anamara">Anamara</option>
-                    <option value="area2">Area 2</option>
                     <option value="banov">Banov</option>
-                    <option value="beringstrait">Bering Strait</option>
-                    <option value="bitterroot">Bitterroot</option>
-                    <option value="chara">Chara</option>
                     <option value="deerisle">Deer Isle</option>
-                    <option value="enoch">Enoch</option>
                     <option value="esseker">Esseker</option>
-                    <option value="grozovoy">Grozovoy Pass</option>
-                    <option value="iztek">Iztek</option>
-                    <option value="krasno">Krasnostav Territory</option>
-                    <option value="melkart">Melkart</option>
                     <option value="namalsk">Namalsk</option>
-                    <option value="nesta">Nesta</option>
-                    <option value="rostow">Rostow</option>
-                    <option value="pvp_arena">Shattered Skies (PvP)</option>
                     <option value="stalker_zone">Stalker Zone (Pripyat)</option>
-                    <option value="swatowo">Swatowo</option>
-                    <option value="takistan">Takistan Plus</option>
-                    <option value="tanoa">Tanoa (DayZ)</option>
-                    <option value="valning">Valning</option>
-                    <option value="vostok">Vostok</option>
-                    <option value="wunderlands">Wunderlands</option>
-                    <option value="zero">Zero Territory</option>
                 </optgroup>
             </select>
-            <select>
-                <option value="">All Formats</option>
+            <select id="format-select">
+                <option value="" id="opt-all-formats">All Formats</option>
                 <option value="json">.JSON (Console / PC)</option>
                 <option value="dze">.DZE (Editor)</option>
             </select>
-            <button class="btn-search">Search</button>
+            <button class="btn-search" id="btn-search-text">Search</button>
         </div>
     </header>
 
     <!-- Projects List -->
     <main>
         <div class="main-header">
-            <h3>Recently Added Projects</h3>
-            <div class="counter">Showing: 2 projects</div>
+            <h3 id="main-section-title">Recently Added Projects</h3>
+            <div class="counter" id="main-counter">Showing: 2 projects</div>
         </div>
         
         <div class="grid">
             <!-- Card 1 -->
             <div class="card">
                 <div class="card-image" style="background-image: url('https://unsplash.com');">
-                    <span class="badge-platform">PC & CONSOLE</span>
+                    <span class="badge-platform" id="card1-platform">PC & CONSOLE</span>
                 </div>
                 <div class="card-body">
                     <div>
@@ -171,15 +167,15 @@
                             <span class="tag">📍 Chernarus</span>
                             <span class="tag">📄 .JSON / .DZE</span>
                         </div>
-                        <h4>Military Checkpoint</h4>
-                        <p>Atmospheric military checkpoint located in Kamyshovo on the main coastal highway. Features roadblocks, watchtowers, medical tents, and wrecked vehicles.</p>
+                        <h4 id="card1-title">Military Checkpoint</h4>
+                        <p id="card1-desc">Atmospheric military checkpoint located in Kamyshovo on the main coastal highway. Features roadblocks, watchtowers, medical tents, and wrecked vehicles.</p>
                     </div>
                     <div class="card-footer">
                         <div class="author-info">
                             <div class="avatar">A</div>
                             <span class="author-name">AdminPro</span>
                         </div>
-                        <button class="btn-download">Download</button>
+                        <button class="btn-download class-dl-btn">Download</button>
                     </div>
                 </div>
             </div>
@@ -187,7 +183,7 @@
             <!-- Card 2 -->
             <div class="card">
                 <div class="card-image" style="background-image: url('https://unsplash.com');">
-                    <span class="badge-platform pc">PC ONLY</span>
+                    <span class="badge-platform pc" id="card2-platform">PC ONLY</span>
                 </div>
                 <div class="card-body">
                     <div>
@@ -195,26 +191,98 @@
                             <span class="tag">📍 Namalsk</span>
                             <span class="tag">📄 .DZE Only</span>
                         </div>
-                        <h4>Underground Ice Bunker</h4>
-                        <p>Hidden deep beneath the glacier ice, a fully decorated custom bunker system. Includes emergency red lights and rare high-tier military loot spawns.</p>
+                        <h4 id="card2-title">Underground Ice Bunker</h4>
+                        <p id="card2-desc">Hidden deep beneath the glacier ice, a fully decorated custom bunker system. Includes emergency red lights and rare high-tier military loot spawns.</p>
                     </div>
                     <div class="card-footer">
                         <div class="author-info">
                             <div class="avatar s">S</div>
                             <span class="author-name">Survivor99</span>
                         </div>
-                        <button class="btn-download">Download</button>
+                        <button class="btn-download class-dl-btn">Download</button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 DayZ Editor Share. All rights reserved.</p>
-        <p class="legal">This website is a fan project and is not affiliated, associated, or endorsed by Bohemia Interactive.</p>
+        <p>&copy; 2026 DayZ Editor Share. <span id="ftr-rights">All rights reserved.</span></p>
+        <p class="legal" id="ftr-legal">This website is a fan project and is not affiliated, associated, or endorsed by Bohemia Interactive.</p>
     </footer>
 
+    <!-- SKRYPT DIALOGU JĘZYKOWEGO (LOGIKA TŁUMACZENIA) -->
+    <script>
+        const translations = {
+            en: {
+                addProject: "Add Project", login: "Login", badge: "DayZ Server Creators Zone",
+                title: "Modify Your Server's Map", desc: 'Browse and download free, ready-to-use <span class="highlight">.dze</span> and <span class="highlight">.json</span> custom files made by the community for PC, PS4, and XBOX players.',
+                searchPlaceholder: "Search custom locations (e.g. Zelengorsk Camp, NWAF Base)...", allMaps: "All Maps (Select)",
+                offMaps: "Official Maps (BI)", commMaps: "Community Maps", allFormats: "All Formats", searchText: "Search",
+                secTitle: "Recently Added Projects", counter: "Showing: 2 projects", c1Platform: "PC & CONSOLE",
+                c1Title: "Military Checkpoint", c1Desc: "Atmospheric military checkpoint located in Kamyshovo on the main coastal highway. Features roadblocks, watchtowers, medical tents, and wrecked vehicles.",
+                c2Platform: "PC ONLY", c2Title: "Underground Ice Bunker", c2Desc: "Hidden deep beneath the glacier ice, a fully decorated custom bunker system. Includes emergency red lights and rare high-tier military loot spawns.",
+                dlText: "Download", rights: "All rights reserved.", legal: "This website is a fan project and is not affiliated, associated, or endorsed by Bohemia Interactive."
+            },
+            pl: {
+                addProject: "Dodaj Projekt", login: "Zaloguj się", badge: "Strefa Twórców Serwerów DayZ",
+                title: "Zmień Wygląd Swojego Serwera", desc: 'Przeglądaj i pobieraj darmowe, gotowe pliki <span class="highlight">.dze</span> oraz <span class="highlight">.json</span> stworzone przez społeczność dla graczy PC, PS4 oraz XBOX.',
+                searchPlaceholder: "Szukaj lokalizacji (np. Obóz Zelengorsk, Baza NWAF)...", allMaps: "Wszystkie Mapy (Wybierz)",
+                offMaps: "Oficjalne Mapy (BI)", commMaps: "Mapy Społeczności", allFormats: "Wszystkie Formaty", searchText: "Szukaj",
+                secTitle: "Ostatnio Dodane Projekty", counter: "Pokazywane: 2 projekty", c1Platform: "PC & KONSOLA",
+                c1Title: "Wojskowy Punkt Kontrolny", c1Desc: "Klimatyczny punkt kontrolny w Kamyshovo na głównej drodze. Dodaje barykady, wieże strażnicze, namioty medyczne oraz wraki aut.",
+                c2Platform: "TYLKO PC", c2Title: "Podziemny Schron Lodowy", c2Desc: "Ukryty głęboko pod lodem, w pełni udekorowany bunkier. Posiada klimatyczne czerwone oświetlenie alarmowe oraz punkty spawnu broni.",
+                dlText: "Pobierz", rights: "Wszystkie prawa zastrzeżone.", legal: "Ta strona jest projektem fanowskim i nie jest w żaden sposób powiązana ani autoryzowana przez Bohemia Interactive."
+            }
+        };
+
+        function toggleLangMenu() {
+            document.getElementById('lang-options-menu').classList.toggle('show-lang');
+        }
+
+        function changeLanguage(lang) {
+            const menu = document.getElementById('lang-options-menu');
+            const btn = document.getElementById('current-lang');
+            menu.classList.remove('show-lang');
+            
+            if(lang === 'en') {
+                btn.innerHTML = `<img src="https://flagcdn.com" class="flag" alt="EN"> EN`;
+            } else {
+                btn.innerHTML = `<img src="https://flagcdn.com" class="flag" alt="PL"> PL`;
+            }
+
+            const t = translations[lang];
+            document.getElementById('nav-btn-add').innerText = t.addProject;
+            document.getElementById('nav-btn-login').innerText = t.login;
+            document.getElementById('hdr-badge').innerText = t.badge;
+            document.getElementById('hdr-title').innerText = t.title;
+            document.getElementById('hdr-desc').innerHTML = t.desc;
+            document.getElementById('search-input').placeholder = t.searchPlaceholder;
+            document.getElementById('opt-all-maps').innerText = t.allMaps;
+            document.getElementById('group-official').label = t.offMaps;
+            document.getElementById('group-community').label = t.commMaps;
+            document.getElementById('opt-all-formats').innerText = t.allFormats;
+            document.getElementById('btn-search-text').innerText = t.searchText;
+            document.getElementById('main-section-title').innerText = t.secTitle;
+            document.getElementById('main-counter').innerText = t.counter;
+            document.getElementById('card1-platform').innerText = t.c1Platform;
+            document.getElementById('card1-title').innerText = t.c1Title;
+            document.getElementById('card1-desc').innerText = t.c1Desc;
+            document.getElementById('card2-platform').innerText = t.c2Platform;
+            document.getElementById('card2-title').innerText = t.c2Title;
+            document.getElementById('card2-desc').innerText = t.c2Desc;
+            document.getElementById('ftr-rights').innerText = t.rights;
+            document.getElementById('ftr-legal').innerText = t.legal;
+
+            document.querySelectorAll('.class-dl-btn').forEach(b => b.innerText = t.dlText);
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.lang-btn') && !event.target.matches('.flag')) {
+                const menu = document.getElementById('lang-options-menu');
+                if (menu) menu.classList.remove('show-lang');
+            }
+        }
+    </script>
 </body>
 </html>
